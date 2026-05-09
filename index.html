@@ -6,7 +6,7 @@
     <title>Fahim Ibrahim | Creative Developer</title>
     <meta name="description" content="Self-taught software developer specialising in frontend & backend development, API integrations, and AI-powered solutions. Building fintech products at Finsense Africa.">
     <meta name="keywords" content="Fahim Ibrahim, Software Developer, Fintech, AI Integration, Frontend Developer, Backend Developer, Nairobi, Kenya">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fahimdev.com/">
@@ -21,11 +21,46 @@
     <meta property="twitter:description" content="Self-taught software developer specialising in fintech and AI-powered solutions.">
     <meta property="twitter:image" content="photo.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Fonts: Clash Display (headings) + Cabinet Grotesk (body) via Fontshare CDN -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&f[]=cabinet-grotesk@300,400,500,700&display=swap" rel="stylesheet">
+    <!-- Fallback: Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- ═══════════════ PRELOADER ════════════════ -->
+<div id="preloader">
+    <div class="pre-inner">
+        <div class="pre-logo">
+            <svg class="pre-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="36" stroke="rgba(239,68,68,0.15)" stroke-width="1.5"/>
+                <circle class="pre-ring" cx="40" cy="40" r="36" stroke="url(#pGrad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226"/>
+                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" class="pre-initial">F</text>
+                <defs>
+                    <linearGradient id="pGrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#ef4444"/>
+                        <stop offset="100%" stop-color="#374151"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="pre-text-wrap">
+            <span class="pre-word">Building</span>
+            <span class="pre-word">something</span>
+            <span class="pre-word pre-accent">great.</span>
+        </div>
+        <div class="pre-bar-track">
+            <div class="pre-bar-fill" id="preBar"></div>
+        </div>
+        <div class="pre-percent" id="prePercent">0%</div>
+    </div>
+    <div class="pre-grid-lines"></div>
+</div>
+<!-- ══════════════════════════════════════════ -->
 
 <!-- CURSOR -->
 <div class="cursor" id="cursor"></div>
@@ -91,16 +126,13 @@
                 <!-- Photo -->
                 <div class="photo-wrap">
                     <div class="photo-border">
-                        <!-- ⬇ Replace src="" with your photo, e.g. src="photo.jpg" -->
                         <img src="photo.png" alt="Fahim Ibrahim" id="profileImg"
                              onerror="this.style.display='none';document.getElementById('profileFallback').style.display='flex'">
                         <div class="photo-fallback" id="profileFallback">
                             <i class="fas fa-user"></i>
                         </div>
                     </div>
-                    <!-- Glow ring behind photo -->
                     <div class="photo-glow"></div>
-                    <!-- Status dot -->
                     <div class="status-dot" title="Available"></div>
                 </div>
 
@@ -177,7 +209,7 @@
             <div class="about-body reveal">
                 <h3>Self-taught. Relentlessly curious. Driven by impact.</h3>
                 <p>I'm a self-taught software developer with a passion for building things that matter. My journey started in high school where I taught myself to code — and I haven't stopped learning since. With 2+ years of professional experience, I specialise in full-stack web development, RESTful & third-party API integrations, and embedding AI capabilities into real-world products.</p>
-                <p>Currently I'm a developer at <strong style="color:var(--green)">Finsense Africa</strong>, where I build and maintain fintech solutions that help people across Africa manage money smarter. I thrive on turning complex problems into clean, performant, and user-friendly software.</p>
+                <p>Currently I'm a developer at <strong style="color:var(--red)">Finsense Africa</strong>, where I build and maintain fintech solutions that help people across Africa manage money smarter. I thrive on turning complex problems into clean, performant, and user-friendly software.</p>
                 <div class="chips">
                     <span>React</span><span>Next.js</span><span>TypeScript</span><span>Node.js</span>
                     <span>Python</span><span>REST APIs</span><span>AI Integration</span><span>PostgreSQL</span>
@@ -235,8 +267,8 @@
                     <p>Fintech web platform for personal finance management — budgeting, expense tracking, and real-time financial insights for African users.</p>
                     <div class="proj-tags"><span>React</span><span>Node.js</span><span>PostgreSQL</span><span>REST API</span></div>
                     <div class="proj-links">
-                        <a href="#" aria-label="View live demo of Finsense Africa Dashboard"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
-                        <a href="#" aria-label="View source code of Finsense Africa Dashboard on GitHub"><i class="fab fa-github"></i> Code</a>
+                        <a href="#" aria-label="View live demo"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+                        <a href="#" aria-label="View source code"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
@@ -247,8 +279,8 @@
                     <p>Intelligent chatbot integrated into a web app using OpenAI's API — handles customer queries, summarises documents, and automates support workflows.</p>
                     <div class="proj-tags"><span>Next.js</span><span>OpenAI API</span><span>Node.js</span></div>
                     <div class="proj-links">
-                        <a href="#" aria-label="View live demo of AI-Powered Chat Assistant"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
-                        <a href="#" aria-label="View source code of AI-Powered Chat Assistant on GitHub"><i class="fab fa-github"></i> Code</a>
+                        <a href="#" aria-label="View live demo"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+                        <a href="#" aria-label="View source code"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
@@ -259,8 +291,8 @@
                     <p>End-to-end payment integration connecting M-Pesa, Stripe, and local African payment providers into a single unified API layer.</p>
                     <div class="proj-tags"><span>Node.js</span><span>M-Pesa API</span><span>Stripe</span></div>
                     <div class="proj-links">
-                        <a href="#" aria-label="View live demo of Payment Gateway Integration"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
-                        <a href="#" aria-label="View source code of Payment Gateway Integration on GitHub"><i class="fab fa-github"></i> Code</a>
+                        <a href="#" aria-label="View live demo"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+                        <a href="#" aria-label="View source code"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
@@ -278,6 +310,7 @@
                 <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
                 <p>"Fahim is an exceptional developer. He took our complex financial requirements and built a seamless API integration that has saved us hundreds of hours. Highly recommended!"</p>
                 <div class="testi-author">
+                    <div class="author-avatar">SM</div>
                     <div class="author-info">
                         <strong>Sarah Mwangi</strong>
                         <span>CEO, Fintech Solutions</span>
@@ -288,6 +321,7 @@
                 <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
                 <p>"The AI chatbot Fahim built for us transformed our customer service. It's fast, smart, and was integrated into our existing stack perfectly."</p>
                 <div class="testi-author">
+                    <div class="author-avatar">DC</div>
                     <div class="author-info">
                         <strong>David Chen</strong>
                         <span>CTO, EduTech Hub</span>
@@ -298,6 +332,7 @@
                 <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
                 <p>"Professional, communicative, and technically brilliant. Fahim delivered our e-commerce platform ahead of schedule and with zero bugs."</p>
                 <div class="testi-author">
+                    <div class="author-avatar">JO</div>
                     <div class="author-info">
                         <strong>James Oloo</strong>
                         <span>Founder, Swift Logistics</span>
@@ -362,7 +397,7 @@
                 <p>I'm currently available for freelance work and open to full-time positions. Whether you have a question or just want to say hi, my inbox is always open.</p>
                 <div class="c-item"><div class="c-icon"><i class="fas fa-envelope"></i></div><span>fahimabdiry@gmail.com</span></div>
                 <div class="c-item"><div class="c-icon"><i class="fas fa-phone"></i></div><span>+254119066393</span></div>
-                <div class="c-item"><div class="c-icon"><i class="fas fa-location-dot"></i></div><span>Nairobi,Kenya</span></div>
+                <div class="c-item"><div class="c-icon"><i class="fas fa-location-dot"></i></div><span>Nairobi, Kenya</span></div>
             </div>
             <div class="contact-form reveal">
                 <form id="contactForm">
@@ -380,13 +415,20 @@
 </section>
 
 <footer>
-    <p>&copy; 2026 Timsnadi/Fahim. Crafted  — <a href="#home">Back to top</a></p>
+    <div class="footer-inner">
+        <span class="footer-logo">FAHIM<span class="logo-dot">.</span>Dev</span>
+        <p>&copy; 2026 Timsnadi/Fahim. Crafted with precision — <a href="#home">Back to top ↑</a></p>
+        <div class="footer-socials">
+            <a href="https://github.com/Timsnadi" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/fahim-abdirisak-27b847216/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
 </footer>
 
 <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">
     <svg class="progress-circle" width="42" height="42" viewBox="0 0 42 42">
         <circle cx="21" cy="21" r="19" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
-        <circle id="progressPath" cx="21" cy="21" r="19" fill="none" stroke-width="2" 
+        <circle id="progressPath" cx="21" cy="21" r="19" fill="none" stroke-width="2"
                 stroke-dasharray="120" stroke-dashoffset="120"/>
     </svg>
     <i class="fas fa-arrow-up"></i>

@@ -1,5 +1,61 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // ══════════════════════════════════════════
+    // ── PRELOADER ──────────────────────────────
+    // ══════════════════════════════════════════
+    (function () {
+        var preloader  = document.getElementById('preloader');
+        var preBar     = document.getElementById('preBar');
+        var prePercent = document.getElementById('prePercent');
+        if (!preloader) return;
+
+        var pct   = 0;
+        var done  = false;
+
+        // Simulate loading progress
+        function tick() {
+            if (done) return;
+            var increment;
+            if (pct < 40)       increment = Math.random() * 10 + 4;
+            else if (pct < 75)  increment = Math.random() * 6  + 2;
+            else if (pct < 95)  increment = Math.random() * 2  + 0.5;
+            else                increment = 0;
+
+            pct = Math.min(pct + increment, 99);
+            if (preBar)     preBar.style.width   = pct + '%';
+            if (prePercent) prePercent.textContent = Math.floor(pct) + '%';
+
+            var delay = pct < 40 ? 80 : pct < 75 ? 120 : 200;
+            setTimeout(tick, delay);
+        }
+        tick();
+
+        // Finish when page is fully loaded
+        function finish() {
+            if (done) return;
+            done = true;
+            pct  = 100;
+            if (preBar)     preBar.style.width    = '100%';
+            if (prePercent) prePercent.textContent = '100%';
+
+            setTimeout(function () {
+                preloader.classList.add('done');
+                document.body.style.overflow = '';
+            }, 500);
+        }
+
+        // Block scroll during load
+        document.body.style.overflow = 'hidden';
+
+        if (document.readyState === 'complete') {
+            setTimeout(finish, 600);
+        } else {
+            window.addEventListener('load', function () { setTimeout(finish, 400); });
+            // Safety net — always finish within 4s
+            setTimeout(finish, 4000);
+        }
+    })();
+
     // ── INTERACTIVE BACKGROUND CANVAS ──────
     try {
         var canvas = document.getElementById('heroBg');
@@ -16,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 H = canvas.height = canvas.offsetHeight;
                 isMobile = window.innerWidth < 768;
                 DOTS = isMobile ? 30 : 70;
-                // Reset dots on resize if mobile state changed
                 if (dots.length > DOTS) dots = dots.slice(0, DOTS);
                 while (dots.length < DOTS) dots.push(makeDot());
             }
@@ -161,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('mousedown', function() { if(ring) ring.classList.add('clicked'); });
         document.addEventListener('mouseup', function() { if(ring) ring.classList.remove('clicked'); });
 
-        // Cursor reaction to scroll
         window.addEventListener('scroll', function() {
             if (ring) {
                 ring.classList.add('scrolling');
@@ -196,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var pathLength = progressPath ? progressPath.getTotalLength() : 0;
 
     if (progressPath) {
-        progressPath.style.strokeDasharray = pathLength + ' ' + pathLength;
+        progressPath.style.strokeDasharray  = pathLength + ' ' + pathLength;
         progressPath.style.strokeDashoffset = pathLength;
     }
 
@@ -211,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (progressPath) {
-            var height = document.documentElement.scrollHeight - window.innerHeight;
+            var height   = document.documentElement.scrollHeight - window.innerHeight;
             var progress = pathLength - (scrollY * pathLength / height);
             progressPath.style.strokeDashoffset = progress;
         }
@@ -297,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
             emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
                 .then(function() {
                     submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-                    submitBtn.style.background = 'linear-gradient(135deg,#6ee7b7,#34d399)';
+                    submitBtn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
                     submitBtn.style.opacity = '1';
                     form.reset();
                     setTimeout(function() {
@@ -353,7 +407,6 @@ document.addEventListener('DOMContentLoaded', function () {
         projectCards.forEach(function(card) {
             card.style.cursor = 'pointer';
             card.addEventListener('click', function(e) {
-                // Prevent modal if clicking on links directly
                 if (e.target.closest('.proj-links')) return;
 
                 var title = card.querySelector('h3').textContent;
