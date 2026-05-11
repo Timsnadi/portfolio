@@ -1,62 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ══════════════════════════════════════════
-    // ── PRELOADER ──────────────────────────────
-    // ══════════════════════════════════════════
+
+
+
     (function () {
-        var preloader  = document.getElementById('preloader');
-        var preBar     = document.getElementById('preBar');
-        var prePercent = document.getElementById('prePercent');
+        var preloader = document.getElementById('preloader');
         if (!preloader) return;
 
-        var pct   = 0;
-        var done  = false;
-
-        // Simulate loading progress
-        function tick() {
-            if (done) return;
-            var increment;
-            if (pct < 40)       increment = Math.random() * 10 + 4;
-            else if (pct < 75)  increment = Math.random() * 6  + 2;
-            else if (pct < 95)  increment = Math.random() * 2  + 0.5;
-            else                increment = 0;
-
-            pct = Math.min(pct + increment, 99);
-            if (preBar)     preBar.style.width   = pct + '%';
-            if (prePercent) prePercent.textContent = Math.floor(pct) + '%';
-
-            var delay = pct < 40 ? 80 : pct < 75 ? 120 : 200;
-            setTimeout(tick, delay);
-        }
-        tick();
-
-        // Finish when page is fully loaded
-        function finish() {
-            if (done) return;
-            done = true;
-            pct  = 100;
-            if (preBar)     preBar.style.width    = '100%';
-            if (prePercent) prePercent.textContent = '100%';
-
-            setTimeout(function () {
-                preloader.classList.add('done');
-                document.body.style.overflow = '';
-            }, 500);
-        }
-
-        // Block scroll during load
         document.body.style.overflow = 'hidden';
 
+        function dismiss() {
+            preloader.classList.add('done');
+            document.body.style.overflow = '';
+        }
+
+
+        var start = Date.now();
+        function onReady() {
+            var elapsed = Date.now() - start;
+            var remaining = Math.max(0, 3000 - elapsed);
+            setTimeout(dismiss, remaining);
+        }
+
         if (document.readyState === 'complete') {
-            setTimeout(finish, 600);
+            onReady();
         } else {
-            window.addEventListener('load', function () { setTimeout(finish, 400); });
-            // Safety net — always finish within 4s
-            setTimeout(finish, 4000);
+            window.addEventListener('load', onReady);
+
+            setTimeout(dismiss, 4000);
         }
     })();
 
-    // ── INTERACTIVE BACKGROUND CANVAS ──────
+
     try {
         var canvas = document.getElementById('heroBg');
         if (canvas) {
@@ -193,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     } catch(e) { console.warn('Canvas error:', e); }
 
-    // ── CURSOR ─────────────────────────────
+
     try {
         var cursor = document.getElementById('cursor');
         var ring   = document.getElementById('cursorRing');
@@ -227,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     } catch(e) { console.warn('Cursor error:', e); }
 
-    // ── HAMBURGER ──────────────────────────
+
     var hamburger = document.getElementById('hamburger');
     var navLinks  = document.getElementById('navLinks');
     if (hamburger && navLinks) {
@@ -243,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── NAVBAR + BACK TO TOP ────────────────
+
     var nav = document.getElementById('navbar');
     var btt = document.getElementById('backToTop');
     var progressPath = document.getElementById('progressPath');
@@ -271,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ── SCROLL REVEAL ───────────────────────
+
     var ro = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); }
@@ -279,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
 
-    // ── TYPEWRITER ──────────────────────────
+
     var tw = document.getElementById('typewriter');
     if (tw) {
         var phrases = ['Frontend Developer.', 'Backend Developer.', 'API Integration Expert.', 'AI Solutions Builder.', 'Fintech Developer.'];
@@ -295,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(type, 800);
     }
 
-    // ── STATS COUNTER ───────────────────────
+
     var sg = document.querySelector('.stats-grid');
     var counted = false;
     if (sg) {
@@ -314,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { threshold: 0.3 }).observe(sg);
     }
 
-    // ── CONTACT FORM (EmailJS) ──────────────
+
     var EMAILJS_PUBLIC_KEY  = '14bVtDjA-ow8yrNNI';
     var EMAILJS_SERVICE_ID  = 'service_t1i4bf5';
     var EMAILJS_TEMPLATE_ID = 'template_ozf35bb';
@@ -374,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── PROJECT MODAL LOGIC ────────────────
+
     var modal     = document.getElementById('projectModal');
     var modalClose = document.getElementById('modalClose');
     var projectCards = document.querySelectorAll('.proj-card');
