@@ -3,97 +3,212 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+    /* ─── PRELOADER ─────────────────────────────────────────── */
     (function () {
-        var preloader = document.getElementById('preloader');
-        var counter   = preloader ? preloader.querySelector('.pre-counter') : null;
+        var el        = document.getElementById('preloader');
+        if (!el) return;
+
+        var counter   = document.getElementById('preCounter');
         var ringFill  = document.getElementById('preRingFill');
+        var ringDot   = document.getElementById('preRingDot');
         var enterBtn  = document.getElementById('enterBtn');
-        var bars      = document.querySelectorAll('.pre-bar');
-        var inner     = document.querySelector('.pre-inner');
-        var preData   = document.getElementById('preData');
-        
-        if (!preloader) return;
+        var tagline   = document.getElementById('preTagline');
+        var statusTxt = document.getElementById('preStatusText');
+        var bars      = el.querySelectorAll('.pre-bar');
+        var inner     = el.querySelector('.pre-inner');
+        var cvs       = document.getElementById('preCanvas');
 
         document.body.style.overflow = 'hidden';
 
-        // Floating Data Generation
-        var dataStrings = ['FETCHING_CORE_ASSETS...', 'INIT_NEURAL_LINK...', 'SECURE_TUNNEL_ESTABLISHED', 'ENCRYPTING_BUFFER...', 'LOAD_MODULE_0xAF', 'HANDSHAKE_SUCCESS', 'BYPASSING_FIREWALL...', 'OPTIMIZING_RENDER_PIPELINE'];
-        setInterval(function() {
-            if (preloader.classList.contains('done')) return;
-            var item = document.createElement('div');
-            item.className = 'pre-data-item';
-            item.textContent = dataStrings[Math.floor(Math.random() * dataStrings.length)];
-            item.style.left = Math.random() * 90 + '%';
-            item.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            if (preData) preData.appendChild(item);
-            setTimeout(function() { item.remove(); }, 15000);
-        }, 800);
+        /* ── Canvas particle field ── */
+        if (cvs) {
+            var ctx2 = cvs.getContext('2d');
+            var PW, PH;
+            var particles = [];
+            var PCOUNT = 55;
 
-        // Counter Logic
+            function resizeCvs() {
+                PW = cvs.width  = cvs.offsetWidth;
+                PH = cvs.height = cvs.offsetHeight;
+            }
+            resizeCvs();
+            window.addEventListener('resize', resizeCvs);
+
+            function makeP() {
+                var a = Math.random() * Math.PI * 2;
+                var s = Math.random() * 0.3 + 0.05;
+                return {
+                    x: Math.random() * PW, y: Math.random() * PH,
+                    vx: Math.cos(a) * s,   vy: Math.sin(a) * s,
+                    r: Math.random() * 1.2 + 0.4,
+                    alpha: Math.random() * 0.4 + 0.1,
+                    phase: Math.random() * Math.PI * 2
+                };
+            }
+            for (var p = 0; p < PCOUNT; p++) particles.push(makeP());
+
+            var pmx = -999, pmy = -999, pT = 0;
+            el.addEventListener('mousemove', function (e) { pmx = e.clientX; pmy = e.clientY; });
+
+            function animCvs() {
+                if (el.style.display === 'none') return;
+                pT++;
+                ctx2.clearRect(0, 0, PW, PH);
+
+                /* faint grid */
+                ctx2.strokeStyle = 'rgba(239,68,68,0.025)';
+                ctx2.lineWidth = 1;
+                for (var gx = 0; gx < PW; gx += 80) { ctx2.beginPath(); ctx2.moveTo(gx,0); ctx2.lineTo(gx,PH); ctx2.stroke(); }
+                for (var gy = 0; gy < PH; gy += 80) { ctx2.beginPath(); ctx2.moveTo(0,gy); ctx2.lineTo(PW,gy); ctx2.stroke(); }
+
+                /* ambient glow orb */
+                var ox = PW * 0.5 + Math.sin(pT * 0.006) * 100;
+                var oy = PH * 0.45 + Math.cos(pT * 0.008) * 60;
+                var og = ctx2.createRadialGradient(ox, oy, 0, ox, oy, 300);
+                og.addColorStop(0, 'rgba(239,68,68,0.07)');
+                og.addColorStop(1, 'rgba(239,68,68,0)');
+                ctx2.fillStyle = og; ctx2.beginPath(); ctx2.arc(ox, oy, 300, 0, Math.PI*2); ctx2.fill();
+
+                /* particles */
+                particles.forEach(function (p) {
+                    var dx = p.x - pmx, dy = p.y - pmy;
+                    var d  = Math.sqrt(dx*dx + dy*dy) || 1;
+                    if (d < 100) { p.vx += (dx/d)*0.4; p.vy += (dy/d)*0.4; }
+                    var sp = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+                    if (sp > 1.8) { p.vx *= 0.9; p.vy *= 0.9; }
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0) p.x = PW; if (p.x > PW) p.x = 0;
+                    if (p.y < 0) p.y = PH; if (p.y > PH) p.y = 0;
+                    var al = p.alpha * (0.5 + 0.5 * Math.sin(pT * 0.025 + p.phase));
+                    ctx2.beginPath(); ctx2.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                    ctx2.fillStyle = 'rgba(239,68,68,' + al + ')'; ctx2.fill();
+                });
+
+                /* connection lines */
+                for (var i = 0; i < particles.length; i++) {
+                    for (var j = i+1; j < particles.length; j++) {
+                        var ddx = particles[i].x - particles[j].x;
+                        var ddy = particles[i].y - particles[j].y;
+                        var dd  = Math.sqrt(ddx*ddx + ddy*ddy);
+                        if (dd < 110) {
+                            ctx2.strokeStyle = 'rgba(239,68,68,' + (0.12 * (1 - dd/110)) + ')';
+                            ctx2.lineWidth = 0.6;
+                            ctx2.beginPath(); ctx2.moveTo(particles[i].x, particles[i].y);
+                            ctx2.lineTo(particles[j].x, particles[j].y); ctx2.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animCvs);
+            }
+            animCvs();
+        }
+
+        /* ── Typewriter tagline ── */
+        var tagPhrases = ['Building something great.', 'Frontend. Backend. AI.', 'Fintech developer in Nairobi.'];
+        var tpIdx = 0, tpChar = 0, tpDel = false;
+        var cursor = tagline ? tagline.querySelector('.pre-tagline-cursor') : null;
+
+        function typeLine() {
+            if (!tagline) return;
+            var phrase = tagPhrases[tpIdx];
+            if (!tpDel) {
+                tpChar++;
+                tagline.textContent = phrase.slice(0, tpChar);
+                if (cursor) tagline.appendChild(cursor);
+                if (tpChar === phrase.length) { tpDel = true; setTimeout(typeLine, 1800); return; }
+                setTimeout(typeLine, 65);
+            } else {
+                tpChar--;
+                tagline.textContent = phrase.slice(0, tpChar);
+                if (cursor) tagline.appendChild(cursor);
+                if (tpChar === 0) { tpDel = false; tpIdx = (tpIdx + 1) % tagPhrases.length; setTimeout(typeLine, 400); return; }
+                setTimeout(typeLine, 38);
+            }
+        }
+        setTimeout(typeLine, 600);
+
+        /* ── Progress ring + counter ── */
         var count = 0;
-        var ringLength = 283; // 2 * PI * 45
-        var loaderInterval = setInterval(function() {
-            count += Math.floor(Math.random() * 2) + 1;
+        var CIRC  = 2 * Math.PI * 54; /* 339.3 */
+        if (ringFill) ringFill.style.strokeDashoffset = CIRC;
+
+        var statusMsgs = ['LOADING ASSETS', 'FETCHING MODULES', 'BUILDING PIPELINE', 'ALMOST READY'];
+
+        var tick = setInterval(function () {
+            var step = Math.floor(Math.random() * 2) + 1;
+            count = Math.min(count + step, 100);
+
+            /* counter */
+            if (counter) counter.textContent = count;
+
+            /* ring stroke */
+            if (ringFill) ringFill.style.strokeDashoffset = CIRC * (1 - count / 100);
+
+            /* ring dot — rotate around the circle */
+            if (ringDot) {
+                var ang = (count / 100) * 2 * Math.PI - Math.PI / 2;
+                var cx = 60 + 54 * Math.cos(ang);
+                var cy = 60 + 54 * Math.sin(ang);
+                ringDot.setAttribute('cx', cx);
+                ringDot.setAttribute('cy', cy);
+            }
+
+            /* status text */
+            var sIdx = Math.min(Math.floor(count / 26), statusMsgs.length - 1);
+            if (statusTxt) statusTxt.textContent = statusMsgs[sIdx];
+
             if (count >= 100) {
-                count = 100;
-                clearInterval(loaderInterval);
-                onLoadComplete();
+                clearInterval(tick);
+                setTimeout(onReady, 300);
             }
-            if (counter) counter.textContent = (count < 10 ? '0' : '') + count;
-            if (ringFill) {
-                var offset = ringLength - (count / 100 * ringLength);
-                ringFill.style.strokeDashoffset = offset;
-            }
-        }, 40);
+        }, 38);
 
-        function onLoadComplete() {
-            if (inner) inner.classList.add('ready');
-            if (enterBtn) enterBtn.classList.add('show');
-            var tagline = preloader.querySelector('.pre-tagline span');
-            if (tagline) tagline.textContent = 'CORE_SYNCHRONIZED';
-        }
-
-        if (enterBtn) {
-            enterBtn.addEventListener('click', function() {
-                dismiss();
-            });
-        }
-
-        function dismiss() {
-            preloader.classList.add('done');
-            document.body.style.overflow = '';
-            setTimeout(function() {
-                preloader.style.display = 'none';
-            }, 2500);
-        }
-
-        // Parallax and Bar Interaction
-        preloader.addEventListener('mousemove', function(e) {
-            var mx = e.clientX;
-            var my = e.clientY;
-            
-            // Subtle parallax for the inner content
-            var px = (mx - window.innerWidth / 2) / 40;
-            var py = (my - window.innerHeight / 2) / 40;
-            if (inner) inner.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
-
-            bars.forEach(function(bar) {
-                var rect = bar.getBoundingClientRect();
-                var bx = rect.left + rect.width / 2;
-                var by = rect.top + rect.height / 2;
-                var dist = Math.sqrt(Math.pow(mx - bx, 2) + Math.pow(my - by, 2));
-                
-                if (dist < 200) {
-                    var scale = 1 + (200 - dist) / 200 * 2;
-                    bar.style.transform = 'scaleY(' + scale + ')';
-                    bar.style.filter = 'brightness(' + (1.5 + (200 - dist) / 200) + ')';
+        /* Bars — mouse interaction */
+        el.addEventListener('mousemove', function (e) {
+            var mx = e.clientX, my = e.clientY;
+            /* parallax */
+            var px = (mx - window.innerWidth  / 2) / 30;
+            var py = (my - window.innerHeight / 2) / 30;
+            if (inner) inner.style.transform = 'translate(' + px + 'px,' + py + 'px)';
+            /* bars */
+            bars.forEach(function (b) {
+                var r  = b.getBoundingClientRect();
+                var bx = r.left + r.width / 2;
+                var by = r.top  + r.height / 2;
+                var d  = Math.sqrt((mx-bx)*(mx-bx) + (my-by)*(my-by));
+                if (d < 160) {
+                    var scale = 1 + (160 - d) / 160 * 2.2;
+                    b.style.transform = 'scaleY(' + scale + ')';
+                    b.style.filter    = 'brightness(' + (1.3 + (160-d)/160) + ') drop-shadow(0 0 6px #ef4444)';
                 } else {
-                    bar.style.transform = '';
-                    bar.style.filter = '';
+                    b.style.transform = '';
+                    b.style.filter    = '';
                 }
             });
         });
+
+        /* ── Ready state ── */
+        function onReady() {
+            if (statusTxt) statusTxt.textContent = 'READY';
+            if (enterBtn)  enterBtn.classList.add('show');
+        }
+
+        /* ── Dismiss — slat wipe ── */
+        function dismiss() {
+            el.classList.add('done');
+            document.body.style.overflow = '';
+            setTimeout(function () { el.style.display = 'none'; }, 1600);
+        }
+
+        if (enterBtn) enterBtn.addEventListener('click', dismiss);
+
+        /* fail-safe after 6s */
+        setTimeout(function () {
+            if (count < 100) { clearInterval(tick); count = 100; onReady(); }
+        }, 6000);
     })();
+    /* ─────────────────────────────────────────────────────── */
+
 
 
     try {
