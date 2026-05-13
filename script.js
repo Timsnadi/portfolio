@@ -720,4 +720,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
+    /* ── Reality Warp: Theme Switcher ── */
+    (function () {
+        var core  = document.getElementById('themeCore');
+        var wipe  = document.getElementById('themeWipe');
+        if (!core || !wipe) return;
+
+        var currentTheme = localStorage.getItem('portfolio-theme') || 'theme-void';
+        document.body.className = currentTheme;
+
+        core.addEventListener('click', function () {
+            if (wipe.classList.contains('active')) return;
+
+            var isDark = document.body.classList.contains('theme-void');
+            var nextTheme = isDark ? 'theme-solar' : 'theme-void';
+            
+            /* Prepare the wipe: set its color to the TARGET theme's background */
+            wipe.style.background = isDark ? '#fcfcfd' : '#0a0b0f';
+            
+            /* Start the liquid wipe */
+            wipe.classList.add('active');
+
+            /* Mid-way through the animation (~500ms), swap the actual theme variables */
+            setTimeout(function () {
+                document.body.className = nextTheme;
+                localStorage.setItem('portfolio-theme', nextTheme);
+            }, 500);
+
+            /* Clean up the wipe element after animation finishes */
+            setTimeout(function () {
+                wipe.classList.remove('active');
+            }, 1200);
+        });
+    })();
+
 });
