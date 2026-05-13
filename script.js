@@ -600,4 +600,124 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /* ══════════════════════════════════════════════
+       ENHANCEMENTS
+    ══════════════════════════════════════════════ */
+
+    /* ── Scroll progress bar ── */
+    var scrollBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', function () {
+        var st = window.scrollY;
+        var dh = document.documentElement.scrollHeight - window.innerHeight;
+        if (scrollBar) scrollBar.style.width = (dh > 0 ? (st / dh) * 100 : 0) + '%';
+    }, { passive: true });
+
+    /* ── Active nav link via IntersectionObserver ── */
+    (function () {
+        var sections   = document.querySelectorAll('section[id]');
+        var navLinks   = document.querySelectorAll('.nav-link');
+        if (!sections.length || !navLinks.length) return;
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    var id = entry.target.id;
+                    navLinks.forEach(function (l) {
+                        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+
+        sections.forEach(function (s) { observer.observe(s); });
+    })();
+
+    /* ── Skills tabs ── */
+    (function () {
+        var tabs   = document.querySelectorAll('.skill-tab');
+        var panels = document.querySelectorAll('.skills-panel');
+        if (!tabs.length) return;
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                tabs.forEach(function (t) { t.classList.remove('active'); });
+                panels.forEach(function (p) { p.classList.remove('active'); });
+                tab.classList.add('active');
+                var panel = document.getElementById('tab-' + tab.dataset.tab);
+                if (panel) {
+                    panel.classList.add('active');
+                    animateBarsInPanel(panel);
+                }
+            });
+        });
+
+        /* Animate bars when section scrolls into view */
+        var skillsSection = document.getElementById('skills');
+        if (skillsSection) {
+            var barObserver = new IntersectionObserver(function (entries) {
+                if (entries[0].isIntersecting) {
+                    var activePanel = document.querySelector('.skills-panel.active');
+                    if (activePanel) animateBarsInPanel(activePanel);
+                    barObserver.disconnect();
+                }
+            }, { threshold: 0.2 });
+            barObserver.observe(skillsSection);
+        }
+
+        function animateBarsInPanel(panel) {
+            panel.querySelectorAll('.sb-fill').forEach(function (fill) {
+                fill.style.width = fill.dataset.w + '%';
+            });
+        }
+    })();
+
+    /* ── Project card 3D tilt ── */
+    (function () {
+        var projCards = document.querySelectorAll('.proj-card');
+        projCards.forEach(function (card) {
+            card.addEventListener('mousemove', function (e) {
+                var r   = card.getBoundingClientRect();
+                var x   = (e.clientX - r.left) / r.width  - 0.5;
+                var y   = (e.clientY - r.top)  / r.height - 0.5;
+                card.style.transform = 'perspective(800px) rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 8) + 'deg) translateY(-8px)';
+            });
+            card.addEventListener('mouseleave', function () {
+                card.style.transform = '';
+            });
+        });
+    })();
+
+    /* ── Toast helper ── */
+    function showToast(msg, type) {
+        var toast = document.getElementById('toast');
+        if (!toast) return;
+        var icon = type === 'success' ? '✅' : '❌';
+        toast.innerHTML = '<span class="toast-icon">' + icon + '</span>' + msg;
+        toast.className = 'toast ' + (type || '') + ' show';
+        setTimeout(function () { toast.classList.remove('show'); }, 4000);
+    }
+
+    /* ── Intercept form submit to use toast ── */
+    (function () {
+        var form = document.getElementById('contactForm');
+        if (!form) return;
+        /* Wait for any existing submit listener to be replaced */
+        form.addEventListener('submit', function formEnhance(e) {
+            /* The existing listener fires first; we hook into its completion via a MutationObserver on the button */
+            var btn = document.getElementById('submitBtn');
+            if (!btn) return;
+            /* Watch for the button text to change back to "Send Message" (success) or display error */
+            var mo = new MutationObserver(function () {
+                if (btn.textContent.includes('Sent')) {
+                    showToast('Message sent! I\'ll be in touch soon.', 'success');
+                    mo.disconnect();
+                } else if (btn.textContent.includes('Error')) {
+                    showToast('Something went wrong. Please try again.', 'error');
+                    mo.disconnect();
+                }
+            });
+            mo.observe(btn, { childList: true, subtree: true, characterData: true });
+        });
+    })();
+
 });

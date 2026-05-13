@@ -32,6 +32,9 @@
 </head>
 <body>
 
+<div id="scrollProgress"></div>
+<div id="toast" class="toast" role="alert"></div>
+
 
 <div id="preloader">
     <!-- Exit slats -->
@@ -162,7 +165,7 @@
         </div>
 
 
-        <div class="hero-visual">
+        <div class="hero-visual" id="heroVisual">
             <div class="profile-card">
 
 
@@ -220,6 +223,15 @@
                 </div>
 
             </div>
+
+            <div class="floating-badges" aria-hidden="true">
+                <span class="fbadge" style="--d:0s;   --tx:-145px; --ty:-70px">React</span>
+                <span class="fbadge" style="--d:0.4s;  --tx: 145px; --ty:-80px">Node.js</span>
+                <span class="fbadge" style="--d:0.8s;  --tx:-155px; --ty: 60px">TypeScript</span>
+                <span class="fbadge" style="--d:1.2s;  --tx: 140px; --ty: 70px">Python</span>
+                <span class="fbadge" style="--d:1.6s;  --tx:-10px;  --ty:-160px">Next.js</span>
+                <span class="fbadge" style="--d:2s;    --tx:-10px;  --ty: 165px">PostgreSQL</span>
+            </div>
         </div>
 
     </div>
@@ -266,6 +278,48 @@
     </div>
 </section>
 
+
+<section id="skills" class="section">
+    <div class="container">
+        <div class="sec-label reveal">Tech Stack</div>
+        <h2 class="sec-title reveal">Skills &amp; <span>Technologies</span></h2>
+        <div class="skills-tabs reveal">
+            <button class="skill-tab active" data-tab="frontend">Frontend</button>
+            <button class="skill-tab" data-tab="backend">Backend</button>
+            <button class="skill-tab" data-tab="tools">Tools &amp; DevOps</button>
+        </div>
+        <div class="skills-panel active" id="tab-frontend">
+            <div class="skill-bar-grid">
+                <div class="skill-bar-item"><div class="sb-info"><span>React</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Next.js</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>TypeScript</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>CSS / Tailwind</span><span class="sb-pct">95%</span></div><div class="sb-track"><div class="sb-fill" data-w="95"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>JavaScript</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Figma / UI Design</span><span class="sb-pct">78%</span></div><div class="sb-track"><div class="sb-fill" data-w="78"></div></div></div>
+            </div>
+        </div>
+        <div class="skills-panel" id="tab-backend">
+            <div class="skill-bar-grid">
+                <div class="skill-bar-item"><div class="sb-info"><span>Node.js</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Python</span><span class="sb-pct">82%</span></div><div class="sb-track"><div class="sb-fill" data-w="82"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>REST API Design</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>PostgreSQL</span><span class="sb-pct">80%</span></div><div class="sb-track"><div class="sb-fill" data-w="80"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>MongoDB</span><span class="sb-pct">75%</span></div><div class="sb-track"><div class="sb-fill" data-w="75"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>AI / OpenAI API</span><span class="sb-pct">84%</span></div><div class="sb-track"><div class="sb-fill" data-w="84"></div></div></div>
+            </div>
+        </div>
+        <div class="skills-panel" id="tab-tools">
+            <div class="skill-bar-grid">
+                <div class="skill-bar-item"><div class="sb-info"><span>Git / GitHub</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Docker</span><span class="sb-pct">72%</span></div><div class="sb-track"><div class="sb-fill" data-w="72"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Linux / CLI</span><span class="sb-pct">80%</span></div><div class="sb-track"><div class="sb-fill" data-w="80"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>M-Pesa / Stripe API</span><span class="sb-pct">86%</span></div><div class="sb-track"><div class="sb-fill" data-w="86"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Vercel / Netlify</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+                <div class="skill-bar-item"><div class="sb-info"><span>Postman / Testing</span><span class="sb-pct">82%</span></div><div class="sb-track"><div class="sb-fill" data-w="82"></div></div></div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section id="services" class="section alt">
     <div class="container">
@@ -347,44 +401,22 @@
 </section>
 
 
-<section id="testimonials" class="section alt">
+<section id="testimonials" class="section alt overflow-hidden">
     <div class="container">
         <div class="sec-label reveal">Testimonials</div>
         <h2 class="sec-title reveal">What <span>Clients Say</span></h2>
-        <div class="testimonials-grid">
-            <div class="testi-card reveal">
-                <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
-                <p>"Fahim is an exceptional developer. He took our complex financial requirements and built a seamless API integration that has saved us hundreds of hours. Highly recommended!"</p>
-                <div class="testi-author">
-                    <div class="author-avatar">SM</div>
-                    <div class="author-info">
-                        <strong>Sarah Mwangi</strong>
-                        <span>CEO, Fintech Solutions</span>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
-                <p>"The AI chatbot Fahim built for us transformed our customer service. It's fast, smart, and was integrated into our existing stack perfectly."</p>
-                <div class="testi-author">
-                    <div class="author-avatar">DC</div>
-                    <div class="author-info">
-                        <strong>David Chen</strong>
-                        <span>CTO, EduTech Hub</span>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
-                <p>"Professional, communicative, and technically brilliant. Fahim delivered our e-commerce platform ahead of schedule and with zero bugs."</p>
-                <div class="testi-author">
-                    <div class="author-avatar">JO</div>
-                    <div class="author-info">
-                        <strong>James Oloo</strong>
-                        <span>Founder, Swift Logistics</span>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="marquee-outer">
+        <div class="marquee-track">
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Fahim is an exceptional developer. He took our complex financial requirements and built a seamless API integration that has saved us hundreds of hours. Highly recommended!"</p><div class="testi-author"><div class="author-avatar">SM</div><div class="author-info"><strong>Sarah Mwangi</strong><span>CEO, Fintech Solutions</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"The AI chatbot Fahim built for us transformed our customer service. It's fast, smart, and was integrated into our existing stack perfectly."</p><div class="testi-author"><div class="author-avatar">DC</div><div class="author-info"><strong>David Chen</strong><span>CTO, EduTech Hub</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Professional, communicative, and technically brilliant. Fahim delivered our e-commerce platform ahead of schedule and with zero bugs."</p><div class="testi-author"><div class="author-avatar">JO</div><div class="author-info"><strong>James Oloo</strong><span>Founder, Swift Logistics</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Fahim understood our product vision immediately. The fintech dashboard he built is clean, fast, and our users absolutely love it."</p><div class="testi-author"><div class="author-avatar">AK</div><div class="author-info"><strong>Amina Kamau</strong><span>Product Lead, M-Pawa</span></div></div></div>
+            <!-- Duplicate for infinite loop -->
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Fahim is an exceptional developer. He took our complex financial requirements and built a seamless API integration that has saved us hundreds of hours. Highly recommended!"</p><div class="testi-author"><div class="author-avatar">SM</div><div class="author-info"><strong>Sarah Mwangi</strong><span>CEO, Fintech Solutions</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"The AI chatbot Fahim built for us transformed our customer service. It's fast, smart, and was integrated into our existing stack perfectly."</p><div class="testi-author"><div class="author-avatar">DC</div><div class="author-info"><strong>David Chen</strong><span>CTO, EduTech Hub</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Professional, communicative, and technically brilliant. Fahim delivered our e-commerce platform ahead of schedule and with zero bugs."</p><div class="testi-author"><div class="author-avatar">JO</div><div class="author-info"><strong>James Oloo</strong><span>Founder, Swift Logistics</span></div></div></div>
+            <div class="testi-card"><div class="testi-quote"><i class="fas fa-quote-left"></i></div><p>"Fahim understood our product vision immediately. The fintech dashboard he built is clean, fast, and our users absolutely love it."</p><div class="testi-author"><div class="author-avatar">AK</div><div class="author-info"><strong>Amina Kamau</strong><span>Product Lead, M-Pawa</span></div></div></div>
         </div>
     </div>
 </section>
@@ -448,17 +480,26 @@
             <div class="contact-form reveal">
                 <form id="contactForm">
                     <div class="form-row">
-                        <div class="form-group"><label>Name</label><input type="text" name="from_name" placeholder="John Doe" required></div>
-                        <div class="form-group"><label>Email</label><input type="email" name="reply_to" placeholder="john@example.com" required></div>
+                        <div class="form-group fl"><input type="text" name="from_name" id="fname" placeholder=" " required><label for="fname">Name</label></div>
+                        <div class="form-group fl"><input type="email" name="reply_to" id="femail" placeholder=" " required><label for="femail">Email</label></div>
                     </div>
-                    <div class="form-group"><label>Subject</label><input type="text" name="subject" placeholder="Project Inquiry"></div>
-                    <div class="form-group"><label>Message</label><textarea rows="5" name="message" placeholder="Tell me about your project..." required></textarea></div>
+                    <div class="form-group fl"><input type="text" name="subject" id="fsubject" placeholder=" "><label for="fsubject">Subject</label></div>
+                    <div class="form-group fl"><textarea rows="5" name="message" id="fmessage" placeholder=" " required></textarea><label for="fmessage">Message</label></div>
                     <button type="submit" class="btn-submit" id="submitBtn"><i class="fas fa-paper-plane"></i> Send Message</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+<div class="hire-banner">
+    <div class="hire-banner-inner">
+        <div class="hire-badge"><span class="hb-dot"></span> Available for Work</div>
+        <h2>Let's Build Something <span>Exceptional</span></h2>
+        <p>Open to full-time roles, freelance contracts, and exciting collaborations in software development &amp; AI.</p>
+        <a href="#contact" class="btn btn-primary">Start a Conversation <i class="fas fa-arrow-right"></i></a>
+    </div>
+</div>
 
 <footer>
     <div class="footer-inner">
