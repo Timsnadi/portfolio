@@ -262,11 +262,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            function getAccentRgb() {
+                return getComputedStyle(document.body).getPropertyValue('--accent-rgb').trim() || '239,68,68';
+            }
+            function getWarmRgb() {
+                return getComputedStyle(document.body).getPropertyValue('--accent-warm-rgb').trim() || '255,156,42';
+            }
+
             function drawOrbs() {
+                var accent = getAccentRgb();
+                var warm   = getWarmRgb();
                 var orbs = [
-                    { x:W*0.15+Math.sin(t*0.0007)*70, y:H*0.25+Math.cos(t*0.0009)*55, r:380, c:'239,68,68', o:0.06 },
-                    { x:W*0.85+Math.cos(t*0.0006)*75, y:H*0.75+Math.sin(t*0.0008)*60, r:320, c:'107,114,128', o:0.06 },
-                    { x:W*0.5 +Math.sin(t*0.0005)*90, y:H*0.45+Math.cos(t*0.0007)*45, r:240, c:'153,27,27', o:0.03 }
+                    { x:W*0.15+Math.sin(t*0.0007)*70, y:H*0.25+Math.cos(t*0.0009)*55, r:380, c:accent, o:0.06 },
+                    { x:W*0.85+Math.cos(t*0.0006)*75, y:H*0.75+Math.sin(t*0.0008)*60, r:320, c:warm, o:0.06 },
+                    { x:W*0.5 +Math.sin(t*0.0005)*90, y:H*0.45+Math.cos(t*0.0007)*45, r:240, c:accent, o:0.03 }
                 ];
                 orbs.forEach(function(o) {
                     var g = ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
@@ -278,7 +287,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             function drawGrid() {
-                ctx.strokeStyle = 'rgba(239,68,68,0.04)';
+                var accent = getAccentRgb();
+                ctx.strokeStyle = 'rgba('+accent+',0.04)';
                 ctx.lineWidth = 1;
                 for (var x=0; x<W; x+=60) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
                 for (var y=0; y<H; y+=60) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
@@ -287,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
             function drawMouseGlow() {
                 if (mouse.x < 0 || isMobile) return;
                 var gr   = mouse.down ? ATTRACT * 1.3 : ATTRACT;
-                var col = mouse.down ? '55,65,81' : '239,68,68';
+                var col  = getAccentRgb();
                 var g = ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,gr);
                 g.addColorStop(0,'rgba('+col+',0.07)');
                 g.addColorStop(1,'rgba('+col+',0)');
@@ -315,19 +325,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (d.y < -8) d.y=H+8; if (d.y>H+8) d.y=-8;
                     if (d.burst) { d.life-=0.022; d.alpha=d.life; d.vx*=0.96; d.vy*=0.96; }
                     var al  = d.burst ? d.alpha : d.alpha*(0.6+0.4*Math.sin(t*0.002+d.phase));
-                    var col2 = d.burst ? '153,27,27' : '239,68,68';
+                    var col2 = d.burst ? getWarmRgb() : getAccentRgb();
                     ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
                     ctx.fillStyle = 'rgba('+col2+','+al+')'; ctx.fill();
                 });
             }
 
             function drawLines() {
+                var accent = getAccentRgb();
                 for (var i=0; i<dots.length; i++) {
                     for (var j=i+1; j<dots.length; j++) {
                         var dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y;
                         var d=Math.sqrt(dx*dx+dy*dy);
                         if (d < CONNECT) {
-                            ctx.strokeStyle='rgba(239,68,68,'+(1-d/CONNECT)*0.15+')';
+                            ctx.strokeStyle='rgba('+accent+','+(1-d/CONNECT)*0.15+')';
                             ctx.lineWidth=0.7;
                             ctx.beginPath(); ctx.moveTo(dots[i].x,dots[i].y);
                             ctx.lineTo(dots[j].x,dots[j].y); ctx.stroke();
@@ -382,8 +393,9 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch(e) { console.warn('Cursor error:', e); }
 
 
-    var hamburger = document.getElementById('hamburger');
+var hamburger = document.getElementById('hamburger');
     var navLinks  = document.getElementById('navLinks');
+
     if (hamburger && navLinks) {
         hamburger.addEventListener('click', function() {
             hamburger.classList.toggle('active');
@@ -400,6 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var nav = document.getElementById('navbar');
     var btt = document.getElementById('backToTop');
+    var scrollBar = document.getElementById('scrollProgress');
     var progressPath = document.getElementById('progressPath');
     var pathLength = progressPath ? progressPath.getTotalLength() : 0;
 
@@ -408,8 +421,10 @@ document.addEventListener('DOMContentLoaded', function () {
         progressPath.style.strokeDashoffset = pathLength;
     }
 
-    window.addEventListener('scroll', function() {
+    function updateScrollUi() {
         var scrollY = window.scrollY;
+        var height = document.documentElement.scrollHeight - window.innerHeight;
+
         if (scrollY > 60) {
             if (nav) nav.classList.add('scrolled');
             if (btt) btt.classList.add('show');
@@ -419,11 +434,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (progressPath) {
-            var height   = document.documentElement.scrollHeight - window.innerHeight;
             var progress = pathLength - (scrollY * pathLength / height);
             progressPath.style.strokeDashoffset = progress;
         }
-    });
+
+        if (scrollBar) scrollBar.style.width = (height > 0 ? (scrollY / height) * 100 : 0) + '%';
+    }
+
+    var scrollTicking = false;
+    window.addEventListener('scroll', function() {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(function() {
+            updateScrollUi();
+            scrollTicking = false;
+        });
+    }, { passive: true });
+    updateScrollUi();
 
 
     var ro = new IntersectionObserver(function(entries) {
@@ -604,14 +631,6 @@ document.addEventListener('DOMContentLoaded', function () {
        ENHANCEMENTS
     ══════════════════════════════════════════════ */
 
-    /* ── Scroll progress bar ── */
-    var scrollBar = document.getElementById('scrollProgress');
-    window.addEventListener('scroll', function () {
-        var st = window.scrollY;
-        var dh = document.documentElement.scrollHeight - window.innerHeight;
-        if (scrollBar) scrollBar.style.width = (dh > 0 ? (st / dh) * 100 : 0) + '%';
-    }, { passive: true });
-
     /* ── Active nav link via IntersectionObserver ── */
     (function () {
         var sections   = document.querySelectorAll('section[id]');
@@ -726,31 +745,54 @@ document.addEventListener('DOMContentLoaded', function () {
         var wipe  = document.getElementById('themeWipe');
         if (!core || !wipe) return;
 
-        var currentTheme = localStorage.getItem('portfolio-theme') || 'theme-void';
-        document.body.className = currentTheme;
+        var storedTheme = localStorage.getItem('portfolio-theme') || 'theme-void';
+        if (storedTheme === 'void') storedTheme = 'theme-void';
+        if (storedTheme === 'solar') storedTheme = 'theme-solar';
+        function setThemeClass(themeName) {
+            document.body.classList.remove('theme-void', 'theme-solar');
+            document.body.classList.add(themeName);
+        }
+
+        setThemeClass(storedTheme);
 
         core.addEventListener('click', function () {
             if (wipe.classList.contains('active')) return;
 
             var isDark = document.body.classList.contains('theme-void');
             var nextTheme = isDark ? 'theme-solar' : 'theme-void';
-            
+
+            var coreRect = core.getBoundingClientRect();
+            var wipeX = coreRect.left + coreRect.width / 2;
+            var wipeY = coreRect.top + coreRect.height / 2;
+            wipe.style.setProperty('--wipe-x', wipeX + 'px');
+            wipe.style.setProperty('--wipe-y', wipeY + 'px');
+
             /* Prepare the wipe: set its color to the TARGET theme's background */
             wipe.style.background = isDark ? '#fcfcfd' : '#0a0b0f';
-            
-            /* Start the liquid wipe */
-            wipe.classList.add('active');
+            wipe.classList.remove('fade-out');
+            document.body.classList.add('theme-transitioning');
 
-            /* Mid-way through the animation (~500ms), swap the actual theme variables */
+            /* Start the wipe */
+            requestAnimationFrame(function () {
+                wipe.classList.add('active');
+            });
+
+            /* Swap theme at peak wipe coverage */
             setTimeout(function () {
-                document.body.className = nextTheme;
+                setThemeClass(nextTheme);
                 localStorage.setItem('portfolio-theme', nextTheme);
-            }, 500);
+            }, 420);
 
-            /* Clean up the wipe element after animation finishes */
+            /* Fade wipe out and then cleanup classes */
+            setTimeout(function () {
+                wipe.classList.add('fade-out');
+            }, 620);
+
             setTimeout(function () {
                 wipe.classList.remove('active');
-            }, 1200);
+                wipe.classList.remove('fade-out');
+                document.body.classList.remove('theme-transitioning');
+            }, 980);
         });
     })();
 

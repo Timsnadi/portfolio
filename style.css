@@ -29,27 +29,35 @@ body, body.theme-void {
     --green:    #ef4444;
     --purple:   #374151;
     --pink:     #991b1b;
+    --accent: #ef4444;
+    --accent-rgb: 239, 68, 68;
+    --accent-warm-rgb: 255, 156, 42;
+    --accent-soft: rgba(239,68,68,0.18);
     --canvas-opacity: 0.6;
     --scanline-opacity: 0.15;
 }
 
 /* ── SOLARIS THEME (Unique Light) ── */
 body.theme-solar {
-    --bg:       #fcfcfd;
-    --bg2:      #f4f5f7;
-    --bg3:      #e8eaed;
+    --bg:       #f3f5f9;
+    --bg2:      #e7eaef;
+    --bg3:      #dce2e9;
     --card:     #ffffff;
-    --card2:    #f8f9fa;
-    --border:   rgba(0,0,0,0.07);
-    --border2:  rgba(0,0,0,0.12);
-    --text:     #101114;
-    --text2:    #3a3b40;
-    --muted:    #64666e;
-    --red:      #d92d20;
-    --red-dim:  rgba(217, 45, 32, 0.08);
-    --red-glow: rgba(217, 45, 32, 0.15);
-    --slate:    #475467;
-    --slate-dim:rgba(71, 84, 103, 0.1);
+    --card2:    #eff3f8;
+    --border:   rgba(15,23,42,0.08);
+    --border2:  rgba(15,23,42,0.13);
+    --text:     #0e1522;
+    --text2:    #252f3d;
+    --muted:    #4a5361;
+    --red:      #c62e24;
+    --red-dim:  rgba(198, 46, 36, 0.1);
+    --red-glow: rgba(198, 46, 36, 0.18);
+    --slate:    #42516a;
+    --slate-dim:rgba(66, 81, 106, 0.16);
+    --accent: #c62e24;
+    --accent-rgb: 198, 46, 36;
+    --accent-warm-rgb: 238, 128, 38;
+    --accent-soft: rgba(198,46,36,0.16);
     --canvas-opacity: 0.4;
     --scanline-opacity: 0.05;
 }
@@ -63,6 +71,7 @@ body {
     overflow-x: hidden;
     line-height: 1.7;
     cursor: none;
+    transition: background .45s ease, color .45s ease;
 }
 @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
@@ -507,6 +516,33 @@ nav.scrolled {
     border: 1px solid var(--border); color: var(--muted); background: transparent;
 }
 .btn-outline:hover { border-color: var(--red); color: var(--text); background: rgba(239,68,68,0.04); }
+.btn-contact {
+    position: relative;
+    border: 1px solid color-mix(in srgb, var(--red) 60%, var(--border2));
+    color: #fff;
+    background: linear-gradient(135deg, rgba(var(--accent-rgb),0.92), rgba(var(--accent-warm-rgb),0.82));
+    box-shadow: 0 8px 22px rgba(var(--accent-rgb),0.28);
+}
+.btn-contact::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid rgba(255,255,255,0.18);
+    pointer-events: none;
+}
+.btn-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(var(--accent-rgb),0.36);
+    filter: saturate(1.05);
+}
+.btn-contact i {
+    animation: contact-nudge 1.8s ease-in-out infinite;
+}
+@keyframes contact-nudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+}
 
 
 .hero-socials { display:flex; gap:10px; }
@@ -633,10 +669,10 @@ nav.scrolled {
 
 .avail-badge {
     display: flex; align-items: center; gap: 8px;
-    background: rgba(34,197,94,0.07);
-    border: 1px solid rgba(34,197,94,0.2);
-    border-radius: 100px; padding: 7px 16px;
-    font-size: .71rem; color: #4ade80;
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.28);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: .72rem; color: #14532d;
     position: relative; z-index: 1;
     font-family: var(--fb); letter-spacing: 0.02em;
 }
@@ -658,8 +694,8 @@ nav.scrolled {
 .card-stats {
     display: flex; align-items: center;
     width: 100%; position: relative; z-index: 1;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.84);
+    border: 1px solid rgba(15,23,42,0.08);
     border-radius: 16px; overflow: hidden;
 }
 .cstat { flex:1; padding:14px 6px; text-align:center; }
@@ -1179,6 +1215,47 @@ footer a:hover { opacity: 0.8; }
     50%      { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty) - 10px)); }
 }
 
+body.theme-solar .hero-socials a {
+    background: rgba(255,255,255,0.92);
+    color: var(--text2);
+    border-color: rgba(15,23,42,0.12);
+    box-shadow: 0 12px 24px rgba(15,23,42,0.08);
+}
+body.theme-solar .hero-socials a:hover {
+    background: rgba(243,145,118,0.15);
+}
+
+body.theme-solar .fbadge {
+    background: rgba(255,255,255,0.94);
+    border: 1px solid rgba(15,23,42,0.12);
+    color: var(--text);
+    box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+}
+body.theme-solar .fbadge::before {
+    background: var(--red);
+    box-shadow: 0 0 8px rgba(179,43,34,0.35);
+}
+
+body.theme-solar .chips span {
+    background: rgba(255,255,255,0.78);
+    border-color: rgba(15,23,42,0.12);
+    color: var(--text2);
+}
+
+body.theme-solar .profile-card {
+    background: rgba(255,255,255,0.98);
+    border-color: rgba(15,23,42,0.08);
+    box-shadow: 0 28px 90px rgba(15,23,42,0.1);
+}
+
+body.theme-solar .card-divider {
+    background: linear-gradient(90deg, transparent, rgba(179,43,34,0.22), transparent);
+}
+
+body.theme-solar .about-body p {
+    color: var(--text2);
+}
+
 /* ── Hero visual positioning for badges ── */
 .hero-visual { position: relative; }
 
@@ -1486,13 +1563,37 @@ footer a:hover { opacity: 0.8; }
     z-index: 9998;
     background: var(--bg);
     pointer-events: none;
-    clip-path: circle(0% at 52px calc(100% - 52px));
-    transition: clip-path 1s cubic-bezier(0.76, 0, 0.24, 1);
-    will-change: clip-path;
+    opacity: 0;
+    clip-path: circle(0 at var(--wipe-x, 52px) var(--wipe-y, calc(100% - 52px)));
+    transition: clip-path 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+    will-change: clip-path, opacity;
 }
 
 #themeWipe.active {
-    clip-path: circle(150% at 52px calc(100% - 52px));
+    clip-path: circle(150vmax at var(--wipe-x, 52px) var(--wipe-y, calc(100% - 52px)));
+    opacity: 1;
+}
+
+#themeWipe.fade-out {
+    opacity: 0;
+}
+
+#themeWipe::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--wipe-x, 52px) var(--wipe-y, calc(100% - 52px)), rgba(255,255,255,0.12), transparent 25%);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+body.theme-transitioning,
+body.theme-transitioning * {
+    transition:
+        background-color 0.45s ease,
+        color 0.45s ease,
+        border-color 0.45s ease,
+        box-shadow 0.45s ease;
 }
 
 /* Solar theme specific card tweaks */
@@ -1502,22 +1603,22 @@ footer a:hover { opacity: 0.8; }
 .theme-solar .testi-card,
 .theme-solar .tl-body,
 .theme-solar .contact-form {
-    background: #ffffff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    border-color: rgba(0,0,0,0.05);
+    background: var(--card);
+    box-shadow: 0 12px 32px rgba(15,23,42,0.08);
+    border-color: var(--border2);
 }
 
 .theme-solar .profile-card {
-    background: #ffffff;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.08);
+    background: var(--card2);
+    box-shadow: 0 28px 80px rgba(15,23,42,0.08);
 }
 
 .theme-solar .c-icon {
-    background: rgba(217, 45, 32, 0.05);
+    background: rgba(198, 46, 36, 0.08);
 }
 
 .theme-solar .reality-core {
-    background: #ffffff;
-    border-color: rgba(0,0,0,0.1);
+    background: var(--card);
+    border-color: rgba(15,23,42,0.12);
 }
 
