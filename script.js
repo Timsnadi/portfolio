@@ -5,30 +5,94 @@ document.addEventListener('DOMContentLoaded', function () {
 
     (function () {
         var preloader = document.getElementById('preloader');
+        var counter   = preloader ? preloader.querySelector('.pre-counter') : null;
+        var ringFill  = document.getElementById('preRingFill');
+        var enterBtn  = document.getElementById('enterBtn');
+        var bars      = document.querySelectorAll('.pre-bar');
+        var inner     = document.querySelector('.pre-inner');
+        var preData   = document.getElementById('preData');
+        
         if (!preloader) return;
 
         document.body.style.overflow = 'hidden';
 
+        // Floating Data Generation
+        var dataStrings = ['FETCHING_CORE_ASSETS...', 'INIT_NEURAL_LINK...', 'SECURE_TUNNEL_ESTABLISHED', 'ENCRYPTING_BUFFER...', 'LOAD_MODULE_0xAF', 'HANDSHAKE_SUCCESS', 'BYPASSING_FIREWALL...', 'OPTIMIZING_RENDER_PIPELINE'];
+        setInterval(function() {
+            if (preloader.classList.contains('done')) return;
+            var item = document.createElement('div');
+            item.className = 'pre-data-item';
+            item.textContent = dataStrings[Math.floor(Math.random() * dataStrings.length)];
+            item.style.left = Math.random() * 90 + '%';
+            item.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            if (preData) preData.appendChild(item);
+            setTimeout(function() { item.remove(); }, 15000);
+        }, 800);
+
+        // Counter Logic
+        var count = 0;
+        var ringLength = 283; // 2 * PI * 45
+        var loaderInterval = setInterval(function() {
+            count += Math.floor(Math.random() * 2) + 1;
+            if (count >= 100) {
+                count = 100;
+                clearInterval(loaderInterval);
+                onLoadComplete();
+            }
+            if (counter) counter.textContent = (count < 10 ? '0' : '') + count;
+            if (ringFill) {
+                var offset = ringLength - (count / 100 * ringLength);
+                ringFill.style.strokeDashoffset = offset;
+            }
+        }, 40);
+
+        function onLoadComplete() {
+            if (inner) inner.classList.add('ready');
+            if (enterBtn) enterBtn.classList.add('show');
+            var tagline = preloader.querySelector('.pre-tagline span');
+            if (tagline) tagline.textContent = 'CORE_SYNCHRONIZED';
+        }
+
+        if (enterBtn) {
+            enterBtn.addEventListener('click', function() {
+                dismiss();
+            });
+        }
+
         function dismiss() {
             preloader.classList.add('done');
             document.body.style.overflow = '';
+            setTimeout(function() {
+                preloader.style.display = 'none';
+            }, 2500);
         }
 
+        // Parallax and Bar Interaction
+        preloader.addEventListener('mousemove', function(e) {
+            var mx = e.clientX;
+            var my = e.clientY;
+            
+            // Subtle parallax for the inner content
+            var px = (mx - window.innerWidth / 2) / 40;
+            var py = (my - window.innerHeight / 2) / 40;
+            if (inner) inner.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
 
-        var start = Date.now();
-        function onReady() {
-            var elapsed = Date.now() - start;
-            var remaining = Math.max(0, 3000 - elapsed);
-            setTimeout(dismiss, remaining);
-        }
-
-        if (document.readyState === 'complete') {
-            onReady();
-        } else {
-            window.addEventListener('load', onReady);
-
-            setTimeout(dismiss, 4000);
-        }
+            bars.forEach(function(bar) {
+                var rect = bar.getBoundingClientRect();
+                var bx = rect.left + rect.width / 2;
+                var by = rect.top + rect.height / 2;
+                var dist = Math.sqrt(Math.pow(mx - bx, 2) + Math.pow(my - by, 2));
+                
+                if (dist < 200) {
+                    var scale = 1 + (200 - dist) / 200 * 2;
+                    bar.style.transform = 'scaleY(' + scale + ')';
+                    bar.style.filter = 'brightness(' + (1.5 + (200 - dist) / 200) + ')';
+                } else {
+                    bar.style.transform = '';
+                    bar.style.filter = '';
+                }
+            });
+        });
     })();
 
 

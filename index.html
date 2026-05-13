@@ -34,24 +34,53 @@
 
 
 <div id="preloader">
+    <div class="pre-panels">
+        <div class="pre-p-1"></div>
+        <div class="pre-p-2"></div>
+        <div class="pre-p-3"></div>
+        <div class="pre-p-4"></div>
+    </div>
     <div class="pre-grid-lines"></div>
+    <div class="pre-floating-data" id="preData"></div>
+    
     <div class="pre-inner">
-        <div class="pre-name">FAHIM<span>.Dev</span></div>
-        <div class="pre-wave-row">
-            <div class="pre-bar" style="--i:0"></div>
-            <div class="pre-bar" style="--i:1"></div>
-            <div class="pre-bar" style="--i:2"></div>
-            <div class="pre-bar" style="--i:3"></div>
-            <div class="pre-bar" style="--i:4"></div>
-            <div class="pre-bar" style="--i:5"></div>
-            <div class="pre-bar" style="--i:6"></div>
-            <div class="pre-bar" style="--i:7"></div>
-            <div class="pre-bar" style="--i:8"></div>
-            <div class="pre-bar" style="--i:9"></div>
-            <div class="pre-bar" style="--i:10"></div>
-            <div class="pre-bar" style="--i:11"></div>
+        <div class="pre-header">
+            <div class="pre-name" data-text="FAHIM.Dev">FAHIM<span>.Dev</span></div>
+            <div class="pre-status"><span class="status-blink"></span> SYSTEM ACTIVE</div>
         </div>
-        <div class="pre-tagline">Building something <span>great.</span></div>
+
+        <div class="pre-visual">
+            <div class="pre-wave-row">
+                <div class="pre-bar" style="--i:0"></div>
+                <div class="pre-bar" style="--i:1"></div>
+                <div class="pre-bar" style="--i:2"></div>
+                <div class="pre-bar" style="--i:3"></div>
+                <div class="pre-bar" style="--i:4"></div>
+                <div class="pre-bar" style="--i:5"></div>
+                <div class="pre-bar" style="--i:6"></div>
+                <div class="pre-bar" style="--i:7"></div>
+                <div class="pre-bar" style="--i:8"></div>
+                <div class="pre-bar" style="--i:9"></div>
+                <div class="pre-bar" style="--i:10"></div>
+                <div class="pre-bar" style="--i:11"></div>
+            </div>
+            
+            <div class="pre-ring-wrap">
+                <svg class="pre-ring-svg" viewBox="0 0 100 100">
+                    <circle class="pre-ring-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="pre-ring-fill" id="preRingFill" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="pre-counter">00</div>
+            </div>
+        </div>
+
+        <div class="pre-footer">
+            <div class="pre-tagline">Initializing <span>Neural Interface...</span></div>
+            <button id="enterBtn" class="enter-btn">
+                <span class="btn-text">INITIALIZE CORE</span>
+                <span class="btn-glitch"></span>
+            </button>
+        </div>
     </div>
 </div>
 
